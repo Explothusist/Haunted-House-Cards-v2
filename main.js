@@ -22,6 +22,7 @@ const kCards = {
     Rooms: 11,
 
     DisasterBoonDeck: 12,
+    SetRandomization: 13,
 };
 
 const kColors = {
@@ -730,8 +731,35 @@ function generate_player_small_item_deck() {
 };
 
 // Set Randomization - Vampire
+function generate_set_randomization_vampire_deck() {
+	// card_deck = [];
+	
+    card_deck.push(new Standard_Card("Ravenous Beasts", "{Ravenous_Beasts} Ravenous Beasts: \n Werewolves and other fell beasts stalk under cloak of darkness and rise in frenzied assaults.", "Vampire", "", kCards.SetRandomization_Vampire));
+    card_deck.push(new Standard_Card("Crumbling Fortress", "{Crumbling_Fortress} Crumbling Fortress: \n Enchanted armour and shades of fallen knights keep their vigil as the castle falls prey to time.", "Vampire", "", kCards.SetRandomization_Vampire));
+    card_deck.push(new Standard_Card("Creeping Nightmare", "{Creeping_Nightmare} Creeping Nightmare: \n Fearful ghostly spectres stalk the halls as nightmarish visions emerge from every wall.", "Vampire", "", kCards.SetRandomization_Vampire));
+    card_deck.push(new Standard_Card("Vermin Swarm", "{Vermin_Swarm} Vermin Swarm: \n The scourges of ratmen and creatures more foul emerge from the sewers to strike unwary foes from behind.", "Vampire", "", kCards.SetRandomization_Vampire));
+    card_deck.push(new Standard_Card("Sleepless Guardians", "{Sleepless_Guardians} Sleepless Guardians: \n Mighty ancient powers arise to ward the castle and defend from heroes' despoiling hand.", "Vampire", "", kCards.SetRandomization_Vampire));
+    card_deck.push(new Standard_Card("Insatiable Ghouls", "{Insatiable_Ghouls} Insatiable Ghouls: \n Foul fiends awake and stir to begin the dark hunt to satisfy their morbid hunger once more.", "Vampire", "", kCards.SetRandomization_Vampire));
+    card_deck.push(new Standard_Card("Foul Plaguebearers", "{Foul_Plaguebearers} Foul Plaguebearers: \n Forth from the catacombs come bearers of crippling miasma and necromantic disease.", "Vampire", "", kCards.SetRandomization_Vampire));
+    card_deck.push(new Standard_Card("Malevolent Poltergeists", "{Malevolent_Poltergeists} Malevolent Poltergeists: \n Mischevious sprites toy with heroes' fate, tricking sight and casting the unwary in dire traps.", "Vampire", "", kCards.SetRandomization_Vampire));
+    card_deck.push(new Standard_Card("Malign Necromancers", "{Malign_Necromancers} Malign Necromancers: \n Twisted sorcerers of old and the malign powers they awakened stalk the halls in endless haunted death.", "Vampire", "", kCards.SetRandomization_Vampire));
+
+	cards_per_page = 16;
+};
 
 // Set Randomization - Adventurers
+function generate_set_randomization_adventurers_deck() {
+	// card_deck = [];
+	
+    card_deck.push(new Standard_Card("Thieves' Guild", "{Thieves_Guild} Thieves' Guild: \n Training from the bitter streets grants lithe and graceful speed to the crafty heroes' feet.", "Adventurers", "", kCards.SetRandomization_Adventurers));
+    card_deck.push(new Standard_Card("Treasure Hunters", "{Treasure_Hunters} Treasure Hunters: \n Seeking ancient spoils they come, looting and uncovering aged weapons of great power.", "Adventurers", "", kCards.SetRandomization_Adventurers));
+    card_deck.push(new Standard_Card("Northern Barbarians", "{Northern_Barbarians} Northern Barbarians: \n Fearing no wound nor death itself, the heroes come with a zeal for battle in defense of homeland.", "Adventurers", "", kCards.SetRandomization_Adventurers));
+    card_deck.push(new Standard_Card("Noble Nights", "{Noble_Nights} Noble Nights: \n Armoured and well used to battle's danger, the valiant heroes seek glory and protection for the land.", "Adventurers", "", kCards.SetRandomization_Adventurers));
+    card_deck.push(new Standard_Card("Ancient Clan", "{Ancient_Clan} Ancient Clan: \n Skilled in arts forgotten and armed with knowledge of their foes, the heroes do battle with evil once more.", "Adventurers", "", kCards.SetRandomization_Adventurers));
+    card_deck.push(new Standard_Card("Order of Magi", "{Order_of_Magi} Order of Magi: \n Endowed with the gift of magic, the heroes wield arcane arts to shield themselves and ward evil.", "Adventurers", "", kCards.SetRandomization_Adventurers));
+
+	cards_per_page = 16;
+};
 
 // Misc Special - Sword, Charm, Vampire, Armour, Ratman
 
@@ -961,13 +989,13 @@ function setup_type_pick(sizex, sizey) {
     buttons.push(new Cust_Button((width*0.5)-200, 200+(75*7), 400, 50, "Small Items Deck", function() {
         setup_set_pick(kCards.SmallItemsDeck);
     }));
-    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*8), 400, 50, "Set Randomization - Vampire", function() {
-        setup_set_pick(kCards.SetRandomization_Vampire);
+    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*8), 400, 50, "Set Randomization", function() {
+        setup_set_pick(kCards.SetRandomization);
     }));
-    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*9), 400, 50, "Set Randomization - Adventurers", function() {
-        setup_set_pick(kCards.SetRandomization_Adventurers);
-    }));
-    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*11), 400, 50, "Rooms", function() {
+    // buttons.push(new Cust_Button((width*0.5)-200, 200+(75*9), 400, 50, "Set Randomization - Adventurers", function() {
+    //     setup_set_pick(kCards.SetRandomization_Adventurers);
+    // }));
+    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*9), 400, 50, "Rooms", function() {
         setup_set_pick(kCards.Rooms);
     }));
     // buttons.push(new Cust_Button((width*0.5)-200, 200+(75*12), 400, 50, "New Cards - Good", function() {
@@ -1009,9 +1037,9 @@ function setup_set_pick(type) {
 		case kCards.SmallItemsDeck:
             generate_player_small_item_deck();
 			break;
-		case kCards.SetRandomization_Vampire:
-			break;
-		case kCards.SetRandomization_Adventurers:
+		case kCards.SetRandomization:
+            generate_set_randomization_vampire_deck();
+            generate_set_randomization_adventurers_deck();
 			break;
 		case kCards.Rooms:
 			break;
