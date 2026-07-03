@@ -9,7 +9,7 @@ ctx.font = "20px Garamond";
 const kCards = {
     PlayerDeck_Vampire: 0, // Proof of Concept
     PlayerDeck_Adventurers: 1, // Proof of Concept
-    TimeDeck: 2,
+    TimeDeck: 2, // Complete
     EventDeck: 3,
     HeroDeck: 4,
     HeroDeck_TurnCards: 5,
@@ -274,44 +274,33 @@ function draw_card_back(back_type, x, y, w, h, orient) {
     let text = "";
     switch (back_type) {
         case kCards.PlayerDeck_Vampire:
-            ctx.strokeStyle = kColors.Slate_Black;
-            ctx.lineWidth = 25;
-            ctx.beginPath();
-            ctx.roundRect(x+5, y+5, w-10, h-10, 20);
-            ctx.stroke();
-            
             text = "Vampire";
             ctx.fillStyle = kColors.Demonic_Purple;
-
-            ctx.textAlign = "center";
-            ctx.font = (h*0.15)+"px Garamond";
-            ctx.fillText(text, x+(w/2), y+(h*0.4), w*0.85);
-            ctx.save();
-            ctx.translate(x+(w/2), y+(h*0.6));
-            ctx.rotate(Math.PI);
-            ctx.fillText(text, 0, 0);
-            ctx.restore();
             break;
         case kCards.PlayerDeck_Adventurers:
-            ctx.strokeStyle = kColors.Slate_Black;
-            ctx.lineWidth = 25;
-            ctx.beginPath();
-            ctx.roundRect(x+5, y+5, w-10, h-10, 20);
-            ctx.stroke();
-            
             text = "Adventurers";
             ctx.fillStyle = kColors.Ghostly_Blue;
-            
-            ctx.textAlign = "center";
-            ctx.font = (h*0.15)+"px Garamond";
-            ctx.fillText(text, x+(w/2), y+(h*0.4), w*0.85);
-            ctx.save();
-            ctx.translate(x+(w/2), y+(h*0.6));
-            ctx.rotate(Math.PI);
-            ctx.fillText(text, 0, 0);
-            ctx.restore();
+            break;
+        case kCards.TimeDeck:
+            text = "Time";
+            ctx.fillStyle = kColors.Ominous_Yellow;
             break;
     }
+    ctx.strokeStyle = kColors.Slate_Black;
+    ctx.lineWidth = 25;
+    ctx.beginPath();
+    ctx.roundRect(x+5, y+5, w-10, h-10, 20);
+    ctx.stroke();
+    
+    ctx.textAlign = "center";
+    ctx.font = (h*0.15)+"px Garamond";
+    ctx.fillText(text, x+(w/2), y+(h*0.4), w*0.85);
+    ctx.save();
+    ctx.translate(x+(w/2), y+(h*0.6));
+    ctx.rotate(Math.PI);
+    ctx.fillText(text, 0, 0);
+    ctx.restore();
+            
 };
 
 class Monster_Card {
@@ -592,6 +581,28 @@ function generate_player_deck_adventurers_treasure_hunters_deck() {
 };
 
 // Time Deck
+function generate_time_deck() {
+	// card_deck = [];
+	
+    for (let i = 0; i < 5; i++) { // 5 (+2?)
+        card_deck.push(new Standard_Card("A New Hero", "Adventurers choose one of the remaining Heroes. Place that Hero in the Entrance Hall.", "", "", kCards.TimeDeck));
+    }
+    for (let i = 0; i < 6; i++) { // 6 (+2?)
+        card_deck.push(new Standard_Card("A Brief Respite", "Heal 1 {Damage} Damage from any Hero.", "", "", kCards.TimeDeck));
+    }
+    for (let i = 0; i < 10; i++) { // 10
+        card_deck.push(new Standard_Card("Ill Omens", "Modify the Event Deck to increase the danger level.", "", "", kCards.TimeDeck));
+    }
+    for (let i = 0; i < 10; i++) { // 10
+        card_deck.push(new Standard_Card("Night Falls", "Time of Day becomes Night. Vampire may draw to 10 cards in hand.", "", "", kCards.TimeDeck));
+    }
+    for (let i = 0; i < 10; i++) { // 10
+        card_deck.push(new Standard_Card("Sunrise", "Time of Day becomes Day. Adventurers may draw to 10 cards in hand. Reset attempts on Features and Rooms.", "", "", kCards.TimeDeck));
+    }
+    card_deck.push(new Standard_Card("Overwhelming Darkness", "All Heroes flee the castle. The Vampire wins the game.", "", "", kCards.TimeDeck));
+
+	cards_per_page = 16;
+};
 
 // Event Deck
 
@@ -866,6 +877,7 @@ function setup_set_pick(type) {
             generate_player_deck_adventurers_treasure_hunters_deck();
 			break;
 		case kCards.TimeDeck:
+            generate_time_deck();
 			break;
 		case kCards.EventDeck:
 			break;
