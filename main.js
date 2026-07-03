@@ -10,7 +10,7 @@ const kCards = {
     PlayerDeck_Vampire: 0, // Proof of Concept
     PlayerDeck_Adventurers: 1, // Proof of Concept
     TimeDeck: 2, // Complete
-    EventDeck: 3,
+    EventDeck: 3, // Complete
     HeroDeck: 4,
     HeroDeck_TurnCards: 5,
     DisasterBoonDeck: 6,
@@ -284,6 +284,10 @@ function draw_card_back(back_type, x, y, w, h, orient) {
         case kCards.TimeDeck:
             text = "Time";
             ctx.fillStyle = kColors.Ominous_Yellow;
+            break;
+        case kCards.EventDeck:
+            text = "Event";
+            ctx.fillStyle = kColors.Demonic_Purple;
             break;
     }
     ctx.strokeStyle = kColors.Slate_Black;
@@ -605,6 +609,36 @@ function generate_time_deck() {
 };
 
 // Event Deck
+function generate_event_deck() {
+	// card_deck = [];
+	
+    for (let i = 0; i < 5; i++) { // 5x4 = 20
+        card_deck.push(new Standard_Card("Unnerving Silence", "No effect.", "", "", kCards.EventDeck));
+        card_deck.push(new Standard_Card("Creaks and Groans", "No effect.", "", "", kCards.EventDeck));
+        card_deck.push(new Standard_Card("A Thump in the Dark", "No effect.", "", "", kCards.EventDeck));
+        card_deck.push(new Standard_Card("Looming Shadow", "No effect.", "", "", kCards.EventDeck));
+    }
+    card_deck.push(new Standard_Card("Incredible Boon", "Draw from the Boon Deck. Shuffle the Event Deck.", "", "", kCards.EventDeck));
+    for (let i = 0; i < 3; i++) {
+        card_deck.push(new Standard_Card("A Priceless Artifact", "Trigger a Good {Item} Item Event.", "", "", kCards.EventDeck));
+    }
+    for (let i = 0; i < 3; i++) { // 7 total
+        card_deck.push(new Standard_Card("Favorable Happenstance", "Trigger a Good {Event} Event.", "", "", kCards.EventDeck));
+    }
+    for (let i = 0; i < 4; i++) {
+        card_deck.push(new Standard_Card("Sudden Inspiration", "Trigger a Good {Event} Event.", "", "", kCards.EventDeck));
+    }
+    for (let i = 0; i < 5; i++) { // 10 total
+        card_deck.push(new Standard_Card("Unforseen Danger", "Trigger an Evil {Event} Event.", "", "", kCards.EventDeck));
+        card_deck.push(new Standard_Card("Chance Misstep", "Trigger an Evil {Event} Event.", "", "", kCards.EventDeck));
+    }
+    for (let i = 0; i < 4; i++) {
+        card_deck.push(new Standard_Card("Monstrous Ambush", "Trigger an Evil {Monster} Monster Event.", "", "", kCards.EventDeck));
+    }
+    card_deck.push(new Standard_Card("Sudden Disaster", "Draw from the Disaster Deck. Shuffle the Event Deck.", "", "", kCards.EventDeck));
+
+	cards_per_page = 16;
+};
 
 // Hero Deck
 
@@ -880,6 +914,7 @@ function setup_set_pick(type) {
             generate_time_deck();
 			break;
 		case kCards.EventDeck:
+            generate_event_deck();
 			break;
 		case kCards.HeroDeck:
 			break;
