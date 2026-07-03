@@ -11,7 +11,7 @@ const kCards = {
     PlayerDeck_Adventurers: 1, // Proof of Concept
     TimeDeck: 2, // Complete
     EventDeck: 3, // Complete
-    HeroDeck: 4,
+    HeroDeck: 4, // Complete
     HeroDeck_TurnCards: 5,
     DisasterBoonDeck: 6,
     // BoonDeck: 7,
@@ -289,6 +289,10 @@ function draw_card_back(back_type, x, y, w, h, orient) {
             text = "Event";
             ctx.fillStyle = kColors.Demonic_Purple;
             break;
+        case kCards.HeroDeck:
+            text = "Hero";
+            ctx.fillStyle = kColors.Unholy_Orange;
+            break;
     }
     ctx.strokeStyle = kColors.Slate_Black;
     ctx.lineWidth = 25;
@@ -361,7 +365,7 @@ class Monster_Card {
 
 		// ctx.font = (h*0.07)+"px Garamond";
 		ctx.font = (h*0.06)+"px Garamond";
-		interpret_text(this.special, x+(w/2), y+(h*0.55), w, h, h*0.06);
+		interpret_text(this.special, x+(w/2), y+(h*0.59), w, h, h*0.06);
 
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.textAlign = "center";
@@ -641,6 +645,24 @@ function generate_event_deck() {
 };
 
 // Hero Deck
+function generate_hero_deck() {
+	// card_deck = [];
+	
+    card_deck.push(new Monster_Card("Berserker", [8, 7, 5, 4], "+1 to checks against Terrified. \n \n On death: Deal 1 {Damage} Damage, grevious, to the {Health} Health of all Monsters within one room.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Monk", [7, 8, 4, 5], "+1 to checks against Wounded. \n \n On death: Deal 1 {Damage} Damage, grevious, to the {Wisdom} Wisdom of all Monsters within one room.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Rogue", [7, 8, 5, 4], "Whenever a Hero becomes Wounded or Terrified, may equip 1 {Item} Item that Hero had equipped. \n \n On death: Return all equipped {Item} Items to Adventurers' hand.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Artificer", [8, 7, 4, 5], "May equip up to 5 {Item} Items. \n \n On death: Equip up to 3 equipped {Item} Items to 3 different Heroes.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Ranger", [7, 8, 5, 4], "Whenever a Monster enters the room or this Hero enters a room with a Monster, this Hero may make a single attack roll. \n \n On death: Deal 1 {Damage} Damage each to the {Health} Health and {Wisdom} Wisdom of the nearest Monster.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Paladin", [8, 7, 5, 4], "Whenever this Hero suffers {Damage} Damage, it may make a single attack roll against any Monster in the room. \n \n On death: Nearest Hero ignores next source of {Damage} Damage.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Seer", [7, 8, 4, 5], "During the Day, after revealing the draw from the Event Deck, this Hero may decide not to move. \n \n On death: Adventurers may view and reorder the top 6 cards of the Event Deck and may discard one.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Sorcerer", [8, 7, 4, 5], "After triggering a Good event of any kind, gain +1 to all stats until taking {Damage} Damage. \n \n On death: Two Heroes immediately trigger Good {Event} Events.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Adventurer", [7, 8, 5, 4], "May ignore the text of rooms. \n \n On death: Reveal any unexplored room.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Druid", [8, 7, 4, 5], "Receive grevious {Damage} Damage as regular {Damage} Damage. \n \n On death: Heal 1 {Damage} Damage each to the {Health} Health and {Wisdom} Wisdom of any Hero.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Warrior", [8, 7, 5, 4], "+2 vs Monster attacks. \n \n On death: All Heroes gain +2 on their next attack.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Wizard", [7, 8, 4, 5], "+2 vs {Event} Event attacks. \n \n On death: Nearest Hero ignores next event draw which triggers and Evil event of any kind.", "", "", kCards.HeroDeck));
+
+	cards_per_page = 16;
+};
 
 // Hero Deck - Turn Cards
 
@@ -917,6 +939,7 @@ function setup_set_pick(type) {
             generate_event_deck();
 			break;
 		case kCards.HeroDeck:
+            generate_hero_deck();
 			break;
 		case kCards.HeroDeck_TurnCards:
 			break;
