@@ -13,12 +13,15 @@ const kCards = {
     EventDeck: 3, // Complete
     HeroDeck: 4, // Complete
     HeroDeck_TurnCards: 5,
-    DisasterBoonDeck: 6,
-    // BoonDeck: 7,
+    DisasterDeck: 6, // Complete
+    BoonDeck: 7, // Complete
     SmallItemsDeck: 8,
     SetRandomization_Vampire: 9,
     SetRandomization_Adventurers: 10,
-    MiscSpecial: 10 // Like Sword, Charm, Vampire, Armour, Ratman
+    MiscSpecial: 10, // Like Sword, Charm, Vampire, Armour, Ratman
+    Rooms: 11,
+
+    DisasterBoonDeck: 12,
 };
 
 const kColors = {
@@ -27,6 +30,7 @@ const kColors = {
     Demonic_Purple: "rgb(184, 38, 177)",
     Ghostly_Blue: "rgb(41, 89, 166)",
     Ominous_Yellow: "rgb(173, 173, 23)",
+    Noxious_Green: "rgb(20, 121, 45)",
     Dingy_Gray: "rgb(66, 66, 66)",
     Slate_Black: "rgb(0, 0, 0)",
     Ghost_White: "rgb(255, 255, 255)"
@@ -283,14 +287,26 @@ function draw_card_back(back_type, x, y, w, h, orient) {
             break;
         case kCards.TimeDeck:
             text = "Time";
-            ctx.fillStyle = kColors.Ominous_Yellow;
+            ctx.fillStyle = kColors.Dingy_Gray;
             break;
         case kCards.EventDeck:
             text = "Event";
-            ctx.fillStyle = kColors.Demonic_Purple;
+            ctx.fillStyle = kColors.Ominous_Yellow;
             break;
         case kCards.HeroDeck:
             text = "Hero";
+            ctx.fillStyle = kColors.Unholy_Orange;
+            break;
+        case kCards.DisasterDeck:
+            text = "Disaster";
+            ctx.fillStyle = kColors.Blood_Red;
+            break;
+        case kCards.BoonDeck:
+            text = "Boon";
+            ctx.fillStyle = kColors.Noxious_Green;
+            break;
+        case kCards.SmallItemsDeck:
+            text = "Small Items";
             ctx.fillStyle = kColors.Unholy_Orange;
             break;
     }
@@ -667,16 +683,59 @@ function generate_hero_deck() {
 // Hero Deck - Turn Cards
 
 // Disaster Deck
+function generate_disaster_deck() {
+	// card_deck = [];
+	
+    card_deck.push(new Standard_Card("Broken Bone", "Suffer 2 {Damage} Damage to {Health} Health.", "", "", kCards.DisasterDeck));
+    card_deck.push(new Standard_Card("Moment of Terror", "Suffer 2 {Damage} Damage to {Wisdom} Wisdom.", "", "", kCards.DisasterDeck));
+    card_deck.push(new Standard_Card("Monstrous Onslaught", "Trigger an Evil {Monster} Monster Event, then all Monsters move to the nearest Hero and perform a surprise attack.", "", "", kCards.DisasterDeck));
+    card_deck.push(new Standard_Card("Awakened Doom", "Trigger an Evil {Event} Event, repeating the {Event} Event on every Hero. In every room, treat the room as having an additional feature of choice.", "", "", kCards.DisasterDeck));
+
+	cards_per_page = 16;
+};
 
 // Boon Deck
+function generate_boon_deck() {
+	// card_deck = [];
+	
+    card_deck.push(new Standard_Card("Fearless Resolve", "Heal all {Damage} Damage from either {Health} Health or {Wisdom} Wisdom.", "", "", kCards.BoonDeck));
+    card_deck.push(new Standard_Card("Bold Resourcefulness", "Choose any room. If unexplored, reveal the room. The room becomes {Lit} Lit.", "", "", kCards.BoonDeck));
+    card_deck.push(new Standard_Card("Heroic Endurance", "Immune to {Damage} Damage for 3 turns.", "", "", kCards.BoonDeck));
+    card_deck.push(new Standard_Card("Legendary Strength", "Heal 1 {Damage} Damage and gain +1 to all stats permanently.", "", "", kCards.BoonDeck));
+
+	cards_per_page = 16;
+};
 
 // Small Items Deck
+function generate_player_small_item_deck() {
+	// card_deck = [];
+	
+    card_deck.push(new Standard_Card("Rusty Mail", "+1 {Health} Health, +1 {Wisdom} Wisdom \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Dented Mace", "+1 {Health} Health, +1 {Might} Might \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Dusty Tome", "+1 {Wisdom} Wisdom, +1 {Power} Power \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Battleworn Gauntlets", "+1 {Might} Might, +1 {Power} Power \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Weathered Axe", "-1 {Health} Health. \n \n +1 {Wisdom} Wisdom, +1 {Might} Might, +1 {Power} Power \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Archaic Amulet", "-1 {Wisdom} Wisdom. \n \n +1 {Health} Health, +1 {Might} Might, +1 {Power} Power \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Splintered Spear", "-1 {Might} Might. \n \n +1 {Health} Health, +1 {Wisdom} Wisdom, +1 {Power} Power \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Dust-Caked Greaves", "-1 {Power} Power. \n \n +1 {Health} Health, +1 {Wisdom} Wisdom, +1 {Might} Might \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Travelworn Boots", "May discard to move 2 rooms. \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Cracked Helm", "May discard to prevent 1 {Damage} Damage, making a check against Wounded or Terrified as normal. \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Bedraggled Buckler", "May discard to add +3 to next check against Wounded or Terrified. \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    card_deck.push(new Standard_Card("Bent Javelin", "May discard to add +3 to next attack. \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
+    for (let i = 0; i < 4; i++) {
+        card_deck.push(new Standard_Card("Aged Hoard", "Draw two more Small {Item} Items and pick one.", "", "", kCards.SmallItemsDeck));
+    }
+
+	cards_per_page = 16;
+};
 
 // Set Randomization - Vampire
 
 // Set Randomization - Adventurers
 
 // Misc Special - Sword, Charm, Vampire, Armour, Ratman
+
+// Rooms
 
 
 function draw_size_pick() {
@@ -908,9 +967,9 @@ function setup_type_pick(sizex, sizey) {
     buttons.push(new Cust_Button((width*0.5)-200, 200+(75*9), 400, 50, "Set Randomization - Adventurers", function() {
         setup_set_pick(kCards.SetRandomization_Adventurers);
     }));
-    // buttons.push(new Cust_Button((width*0.5)-200, 200+(75*11), 400, 50, "New Cards - Evil", function() {
-    //     setup_set_pick(kCards.NEW_EVIL);
-    // }));
+    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*11), 400, 50, "Rooms", function() {
+        setup_set_pick(kCards.Rooms);
+    }));
     // buttons.push(new Cust_Button((width*0.5)-200, 200+(75*12), 400, 50, "New Cards - Good", function() {
     //     setup_set_pick(kCards.NEW_GOOD);
     // }));
@@ -944,12 +1003,17 @@ function setup_set_pick(type) {
 		case kCards.HeroDeck_TurnCards:
 			break;
 		case kCards.DisasterBoonDeck:
+            generate_disaster_deck();
+            generate_boon_deck();
 			break;
 		case kCards.SmallItemsDeck:
+            generate_player_small_item_deck();
 			break;
 		case kCards.SetRandomization_Vampire:
 			break;
 		case kCards.SetRandomization_Adventurers:
+			break;
+		case kCards.Rooms:
 			break;
 	}
 	
