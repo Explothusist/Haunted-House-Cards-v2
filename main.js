@@ -15,14 +15,14 @@ const kCards = {
     HeroDeck_TurnCards: 5,
     DisasterDeck: 6, // Complete
     BoonDeck: 7, // Complete
-    SmallItemsDeck: 8,
-    SetRandomization_Vampire: 9,
-    SetRandomization_Adventurers: 10,
-    MiscSpecial: 10, // Like Sword, Charm, Vampire, Armour, Ratman
-    Rooms: 11,
+    SmallItemsDeck: 8, // Complete
+    SetRandomization_Vampire: 9, // Complete
+    SetRandomization_Adventurers: 10, // Complete
+    MiscSpecial: 11, // Like Sword, Charm, Vampire, Armour, Ratman
+    RoomDeck: 12,
 
-    DisasterBoonDeck: 12,
-    SetRandomization: 13,
+    DisasterBoonDeck: 13,
+    SetRandomization: 14,
 };
 
 const kColors = {
@@ -48,59 +48,48 @@ function embed_image(identifier, x, y, w, h) {
 	switch (identifier) {
 		// case "{Spirit}":
 		// 	img = Spirit_Icon;
-        //     // ctx.fillStyle = kColors.Ghostly_Blue;
 		// 	break;
 		// case "{Unholy}":
 		// 	img = Unholy_Icon;
-        //     // ctx.fillStyle = kColors.Unholy_Orange;
 		// 	break;
 		// case "{Demon}":
 		// 	img = Demon_Icon;
-        //     // ctx.fillStyle = kColors.Demonic_Purple;
 		// 	break;
 		case "{Health}":
 			img = Health_Icon;
-            // ctx.fillStyle = kColors.Blood_Red;
 			break;
 		case "{Wisdom}":
 			img = Wisdom_Icon;
-            // ctx.fillStyle = kColors.Ghostly_Blue;
 			break;
 		case "{Might}":
 			img = Might_Icon;
-            // ctx.fillStyle = kColors.Unholy_Orange;
 			break;
 		case "{Power}":
 			img = Power_Icon;
-            // ctx.fillStyle = kColors.Demonic_Purple;
 			break;
 		// case "{Power}":
 		// 	img = Blast_Icon;
-        //     // ctx.fillStyle = kColors.Demonic_Purple;
 		// 	break;
 		case "{Lit}":
 			img = Lit_Icon;
-            // ctx.fillStyle = kColors.Ominous_Yellow;
 			break;
 		case "{Unlit}":
 			img = Unlit_Icon;
-            // ctx.fillStyle = kColors.Dingy_Gray;
 			break;
 		case "{Armour}":
 			img = Armour_Icon;
-            // ctx.fillStyle = kColors.Unholy_Orange;
 			break;
 		case "{Souls}":
 			img = Souls_Icon;
-            // ctx.fillStyle = kColors.Ghostly_Blue;
 			break;
 		case "{Bones}":
 			img = Bones_Icon;
-            // ctx.fillStyle = kColors.Blood_Red;
 			break;
 		case "{Damage}":
 			img = Damage_Icon;
-            // ctx.fillStyle = kColors.Blood_Red;
+			break;
+		case "{Vampire}":
+			img = Damage_Icon;
 			break;
 	}
 	ctx.drawImage(img, Math.round(x), Math.round(y), Math.round(w), Math.round(h));
@@ -150,6 +139,9 @@ function get_style_after_image(identifier) {
             color = kColors.Unholy_Orange;
 			break;
 		case "{Damage}":
+            color = kColors.Blood_Red;
+			break;
+		case "{Vampire}":
             color = kColors.Blood_Red;
 			break;
 	}
@@ -310,6 +302,18 @@ function draw_card_back(back_type, x, y, w, h, orient) {
             text = "Small Items";
             ctx.fillStyle = kColors.Unholy_Orange;
             break;
+        case kCards.SetRandomization_Vampire:
+            text = "Sets - Vampire";
+            ctx.fillStyle = kColors.Demonic_Purple;
+            break;
+        case kCards.SetRandomization_Adventurers:
+            text = "Sets - Adventurers";
+            ctx.fillStyle = kColors.Ghostly_Blue;
+            break;
+        case kCards.MiscSpecial:
+            text = "Special";
+            ctx.fillStyle = kColors.Ominous_Yellow;
+            break;
     }
     ctx.strokeStyle = kColors.Slate_Black;
     ctx.lineWidth = 25;
@@ -323,7 +327,7 @@ function draw_card_back(back_type, x, y, w, h, orient) {
     ctx.save();
     ctx.translate(x+(w/2), y+(h*0.6));
     ctx.rotate(Math.PI);
-    ctx.fillText(text, 0, 0);
+    ctx.fillText(text, 0, 0, w*0.85);
     ctx.restore();
             
 };
@@ -361,28 +365,28 @@ class Monster_Card {
 		
 		ctx.strokeStyle = kColors.Slate_Black;
 		ctx.lineWidth = 4;
-        ctx.strokeRect(Math.round(x+(w*0.14)), Math.round(y+(h*0.23)), w*0.18, w*0.15);
-        ctx.strokeRect(Math.round(x+(w*0.32)), Math.round(y+(h*0.23)), w*0.18, w*0.15);
-        ctx.strokeRect(Math.round(x+(w*0.50)), Math.round(y+(h*0.23)), w*0.18, w*0.15);
-        ctx.strokeRect(Math.round(x+(w*0.68)), Math.round(y+(h*0.23)), w*0.18, w*0.15);
+        ctx.strokeRect(Math.round(x+(w*0.14)), Math.round(y+(h*0.18)), w*0.18, w*0.15);
+        ctx.strokeRect(Math.round(x+(w*0.32)), Math.round(y+(h*0.18)), w*0.18, w*0.15);
+        ctx.strokeRect(Math.round(x+(w*0.50)), Math.round(y+(h*0.18)), w*0.18, w*0.15);
+        ctx.strokeRect(Math.round(x+(w*0.68)), Math.round(y+(h*0.18)), w*0.18, w*0.15);
 
 		ctx.textAlign = "center";
 		ctx.font = (h*0.07)+"px Garamond";
         ctx.fillStyle = kColors.Blood_Red;
-		interpret_text(this.stats[0]+" {Health}", x+(w*0.235), y+(h*0.31), w, h, h*0.07);
+		interpret_text(this.stats[0]+" {Health}", x+(w*0.235), y+(h*0.26), w, h, h*0.07);
         ctx.fillStyle = kColors.Ghostly_Blue;
-		interpret_text(this.stats[1]+" {Wisdom}", x+(w*0.415), y+(h*0.31), w, h, h*0.07);
+		interpret_text(this.stats[1]+" {Wisdom}", x+(w*0.415), y+(h*0.26), w, h, h*0.07);
         ctx.fillStyle = kColors.Unholy_Orange;
-		interpret_text(this.stats[2]+" {Might}", x+(w*0.595), y+(h*0.31), w, h, h*0.07);
+		interpret_text(this.stats[2]+" {Might}", x+(w*0.595), y+(h*0.26), w, h, h*0.07);
         ctx.fillStyle = kColors.Demonic_Purple;
-		interpret_text(this.stats[3]+" {Power}", x+(w*0.775), y+(h*0.31), w, h, h*0.07);
+		interpret_text(this.stats[3]+" {Power}", x+(w*0.775), y+(h*0.26), w, h, h*0.07);
 
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.textAlign = "center";
 
 		// ctx.font = (h*0.07)+"px Garamond";
 		ctx.font = (h*0.06)+"px Garamond";
-		interpret_text(this.special, x+(w/2), y+(h*0.59), w, h, h*0.06);
+		interpret_text(this.special, x+(w/2), y+(h*0.53), w, h, h*0.06);
 
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.textAlign = "center";
@@ -622,7 +626,7 @@ function generate_time_deck() {
         card_deck.push(new Standard_Card("Night Falls", "Time of Day becomes Night. Vampire may draw to 10 cards in hand.", "", "", kCards.TimeDeck));
     }
     for (let i = 0; i < 10; i++) { // 10
-        card_deck.push(new Standard_Card("Sunrise", "Time of Day becomes Day. Adventurers may draw to 10 cards in hand. Reset attempts on Features and Rooms.", "", "", kCards.TimeDeck));
+        card_deck.push(new Standard_Card("Sunrise", "Time of Day becomes Day. Adventurers may draw to 10 cards in hand. Reset attempts on Features and rooms.", "", "", kCards.TimeDeck));
     }
     card_deck.push(new Standard_Card("Overwhelming Darkness", "All Heroes flee the castle. The Vampire wins the game.", "", "", kCards.TimeDeck));
 
@@ -762,8 +766,30 @@ function generate_set_randomization_adventurers_deck() {
 };
 
 // Misc Special - Sword, Charm, Vampire, Armour, Ratman
+function generate_miscellaneous_special() {
+	// card_deck = [];
+	
+    card_deck.push(new Standard_Card("The Charm", "+1 against attacks except {Vampire} Vampire attacks. \n When the {Vampire} Vampire attacks you, it always misses on an 8 or lower. \n \n This Special {Item} Item remains with the Hero. When it would be lost, drop it instead. One Hero cannot hold both the Charm and the Sword.", "Special {Item} Item", "", kCards.MiscSpecial));
+    card_deck.push(new Standard_Card("The Sword", "+2 to attacks except against the {Vampire} Vampire. \n When you attack the {Vampire} Vampire, always hit on a 7 or greater. \n \n This Special {Item} Item remains with the Hero. When it would be lost, drop it instead. One Hero cannot hold both the Charm and the Sword.", "Special {Item} Item", "", kCards.MiscSpecial));
+    card_deck.push(new Monster_Card("Awakened Vampire", [10, 8, 7, 6], "Placed when a Hero enters the Crypt. May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 4 {Damage} Damage taken, it flees, returning as the Enraged Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
+    card_deck.push(new Monster_Card("Enraged Vampire", [8, 6, 6, 5], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 4 {Damage} Damage taken, it flees, returning as the Injured Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
+    card_deck.push(new Monster_Card("Injured Vampire", [8, 6, 6, 5], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 3 {Damage} Damage taken, it flees, returning as the Desperate Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
+    card_deck.push(new Monster_Card("Desperate Vampire", [7, 6, 5, 4], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 3 {Damage} Damage taken, it flees, returning as the Maimed Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
+    card_deck.push(new Monster_Card("Maimed Vampire", [5, 4, 4, 3], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 3 {Damage} Damage taken, it is defeated and the Adventurers win the game.", "Special {Monster} Monster", "", kCards.MiscSpecial));
+    for (let i = 0; i < 4; i++) {
+        card_deck.push(new Monster_Card("Armour", [4, 4, 3, 3], "+2 to checks against Wounded and Terrified. On death, drop an {Armour} Armour.", "Small {Monster} Monster", "", kCards.MiscSpecial));
+    }
+    for (let i = 0; i < 4; i++) {
+        card_deck.push(new Monster_Card("Ratman", [4, 4, 3, 3], "If {Sewer} Sewer, may move to any {Sewer} Sewer. On death, drop a {Bones} Bones.", "Small {Monster} Monster", "", kCards.MiscSpecial));
+    }
+    for (let i = 0; i < 8; i++) {
+        card_deck.push(new Monster_Card("Zombie", [3, 3, 2, 2], "On death, instead remain dormant until a Hero enters the room, then respawn. When it respawns during Day, it gain -1 to all stats.", "Small {Monster} Monster", "", kCards.MiscSpecial));
+    }
 
-// Rooms
+	cards_per_page = 16;
+};
+
+// Room Deck
 
 
 function draw_size_pick() {
@@ -992,11 +1018,11 @@ function setup_type_pick(sizex, sizey) {
     buttons.push(new Cust_Button((width*0.5)-200, 200+(75*8), 400, 50, "Set Randomization", function() {
         setup_set_pick(kCards.SetRandomization);
     }));
-    // buttons.push(new Cust_Button((width*0.5)-200, 200+(75*9), 400, 50, "Set Randomization - Adventurers", function() {
-    //     setup_set_pick(kCards.SetRandomization_Adventurers);
-    // }));
-    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*9), 400, 50, "Rooms", function() {
-        setup_set_pick(kCards.Rooms);
+    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*9), 400, 50, "Miscellaneous Special", function() {
+        setup_set_pick(kCards.MiscSpecial);
+    }));
+    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*10), 400, 50, "Room Deck", function() {
+        setup_set_pick(kCards.RoomDeck);
     }));
     // buttons.push(new Cust_Button((width*0.5)-200, 200+(75*12), 400, 50, "New Cards - Good", function() {
     //     setup_set_pick(kCards.NEW_GOOD);
@@ -1041,7 +1067,10 @@ function setup_set_pick(type) {
             generate_set_randomization_vampire_deck();
             generate_set_randomization_adventurers_deck();
 			break;
-		case kCards.Rooms:
+		case kCards.MiscSpecial:
+            generate_miscellaneous_special();
+			break;
+		case kCards.RoomDeck:
 			break;
 	}
 	
