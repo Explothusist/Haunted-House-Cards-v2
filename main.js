@@ -238,7 +238,8 @@ function interpret_text_right_aligned(ctx, text, x, y, w, h, line_height) {
 		}
 	}
 
-	let mod_height = Math.floor((lines.length+1)/3);
+	// let mod_height = Math.floor((lines.length+1)/3);
+	let mod_height = lines.length-1;
 	// for (let i = 0; i < lines.length; i++) {
 	// 	ctx.fillText(lines[i], x, y+((i-mod_height)*h*0.07));
 	// }
@@ -465,12 +466,12 @@ class Standard_Card {
 class Room_Card {
 	title;
 	special;
-	image;
+    set;
 
-	constructor(title, special, image) {
+	constructor(title, special, set) {
 		this.title = title;
 		this.special = special;
-		this.image = image;
+        this.set = set;
 	}
 	get_name() {
 		return this.title;
@@ -481,8 +482,6 @@ class Room_Card {
 		ctx.beginPath();
 		ctx.roundRect(Math.round(x+2), Math.round(y+2), Math.round(w-4), Math.round(h-4), 24);
 		ctx.stroke();
-
-		// ctx.drawImage(this.image, x, y);
 		
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.textAlign = "left";
@@ -492,7 +491,11 @@ class Room_Card {
 
 		ctx.textAlign = "right";
 		ctx.font = (h*0.05)+"px Garamond";
-		interpret_text_right_aligned(this.special, x+(w*0.96), y+(h*0.96), w, h, h*0.05);
+		interpret_text_right_aligned(ctx, this.special, x+(w*0.96), y+(h*0.96), w, h, h*0.05);
+
+		ctx.fillStyle = kColors.Slate_Black;
+		ctx.font = (h*0.07)+"px Garamond";
+		interpret_text(ctx, this.set, x+(w*0.08), y+(h*0.95), w, h, h*0.07);
 	}
 	draw_back(ctx, x, y, w, h, orient) {
 		
@@ -656,7 +659,7 @@ function generate_event_deck() {
         card_deck.push(new Standard_Card("A Thump in the Dark", "No effect.", "", "", kCards.EventDeck));
         card_deck.push(new Standard_Card("Looming Shadow", "No effect.", "", "", kCards.EventDeck));
     }
-    card_deck.push(new Standard_Card("Incredible Boon", "Draw from the Boon Deck. Shuffle the Event Deck.", "", "", kCards.EventDeck));
+    card_deck.push(new Standard_Card("Incredible Boon", "Draw from the Boon Deck. Shuffle the Event Deck. \n \n Overrides all other draws. Cannot be prevented.", "", "", kCards.EventDeck));
     for (let i = 0; i < 3; i++) {
         card_deck.push(new Standard_Card("A Priceless Artifact", "Trigger a Good {Item} Item Event.", "", "", kCards.EventDeck));
     }
@@ -673,7 +676,7 @@ function generate_event_deck() {
     for (let i = 0; i < 4; i++) {
         card_deck.push(new Standard_Card("Monstrous Ambush", "Trigger an Evil {Monster} Monster Event.", "", "", kCards.EventDeck));
     }
-    card_deck.push(new Standard_Card("Sudden Disaster", "Draw from the Disaster Deck. Shuffle the Event Deck.", "", "", kCards.EventDeck));
+    card_deck.push(new Standard_Card("Sudden Disaster", "Draw from the Disaster Deck. Shuffle the Event Deck. \n \n Overrides all other draws, except Incredible Boon. Cannot be prevented.", "", "", kCards.EventDeck));
 
 	cards_per_page = 16;
 };
@@ -803,6 +806,76 @@ function generate_miscellaneous_special() {
 };
 
 // Room Deck
+function generate_room_deck_base() {
+	// card_deck = [];
+	
+    card_deck.push(new Room_Card("Crypt", "First enter, spawn {Vampire} Vampire. \n For Evil effects, has all features. \n Cannot be Fully {Lit} Lit.", "{Base}"));
+    card_deck.push(new Room_Card("Chapel", "Always Fully {Lit} Lit. \n Contains the Charm, the Sword.", "{Base}"));
+    card_deck.push(new Room_Card("Study", "{Souls} Souls \n -1 to {Vampire} Vampire attacks. \n 1 {Damage} Damage less before flee.", "{Base}"));
+    card_deck.push(new Room_Card("Bedroom", "{Bones} Bones \n Victory after third flee. \n No ambush when found. \n Flee max 3 rooms.", "{Base}"));
+    card_deck.push(new Room_Card("Entrance Hall", "Always {Lit} Lit.", "{Base}"));
+
+    card_deck.push(new Room_Card("Library", "{Armour} Armour, {Aura} Aura \n 5+ check to heal 1 {Damage} Damage from {Wisdom} Wisdom. Evil {Event} Event if failed. -1 if Night, -2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Library", "{Armour} Armour, {Aura} Aura \n 5+ check to view the top 6 cards of the Event Deck, reorder, and may discard 1. If failed, Vampire may instead. -1 if Night, -2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Pantry", "{Armour} Armour, {Ruins} Ruins \n 5+ check to heal 1 {Damage} Damage from {Health} Health. Evil {Event} Event if failed. -1 if Night, -2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Pantry", "{Armour} Armour, {Ruins} Ruins \n 5+ check to gain immune to all {Damage} Damage for 3 turns. Evil {Event} Event if failed. -1 if Night, -2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Vault", "{Armour} Armour, {Sewers} Sewers \n Contains two small items and a small monster when revealed.", "{Base}"));
+    card_deck.push(new Room_Card("Vault", "{Armour} Armour, {Sewers} Sewers \n Good events are always {Item} Item, Evil events are always {Monster} Monster. On first enter, skip event draw and trigger one of each, Good first.", "{Base}"));
+    card_deck.push(new Room_Card("Magician's Chamber", "{Sewers} Sewers, {Aura} Aura \n May suffer a {Power} Power 5 attack. If undamaged, may view Vampire's hand. +1 if Night, +2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Magician's Chamber", "{Sewers} Sewers, {Aura} Aura \n May suffer a {Might} Might 5 attack. If undamaged, may reveal an unexplored room. +1 if Night, +2 each for first two successes.", "{Base}"));
+
+	cards_per_page = 9;
+};
+
+// Room Deck - Vampire Sets
+function generate_room_deck_vampire_ravenous_beasts() {
+	// card_deck = [];
+	
+    card_deck.push(new Room_Card("Guestroom", "{Bones} Bones \n Whenever a {Bones} Bones is added to this room or an adjacent room, all Monsters gain +1 to next attack.", "{Ravenous_Beasts}"));
+    card_deck.push(new Room_Card("Gardens", "{Bones} Bones, {Sewers} Sewers \n Contains a {Monster} Monster when revealed.", "{Ravenous_Beasts}"));
+    card_deck.push(new Room_Card("Kitchens", "{Sewers} Sewers", "{Ravenous_Beasts}"));
+    card_deck.push(new Room_Card("Dank Passage", "{Sewers} Sewers", "{Ravenous_Beasts}"));
+
+	cards_per_page = 9;
+};
+function generate_room_deck_vampire_crumbling_fortress() {
+    // card_deck = [];
+	
+    card_deck.push(new Room_Card("Guardroom", "{Armour} Armour \n Whenever {Armour} Armour is animated in or enters this room, it gains +2 to next attack.", "{Crumbling_Fortress}"));
+    card_deck.push(new Room_Card("Crumbling Battlements", "{Armour} Armour, {Ruins} Ruins \n In this and adjacent rooms, may place {Ruins} Ruins instead of {Bones} Bones and {Souls} Souls.", "{Crumbling_Fortress}"));
+    card_deck.push(new Room_Card("Grand Hall", "{Armour} Armour, {Ruins} Ruins", "{Crumbling_Fortress}"));
+    card_deck.push(new Room_Card("Abandoned Corridor", "{Ruins} Ruins", "{Crumbling_Fortress}"));
+    
+	cards_per_page = 9;
+};
+function generate_room_deck_vampire_creeping_nightmare() {
+    // card_deck = [];
+	
+    card_deck.push(new Room_Card("Balcony", "{Souls} Souls \n Redraw event draws in this room that do not trigger an event.", "{Creeping_Nightmare}"));
+    card_deck.push(new Room_Card("Haunted Chamber", "{Souls} Souls, {Aura} Aura \n At end of turn, Heroes in this room suffer a {Power} Power X attack where X is the amount of {Damage} Damage taken. -2 if did not enter this turn.", "{Creeping_Nightmare}"));
+    card_deck.push(new Room_Card("Laboratory", "{Aura} Aura", "{Creeping_Nightmare}"));
+    card_deck.push(new Room_Card("Ancient Gallery", "{Aura} Aura", "{Creeping_Nightmare}"));
+    
+	cards_per_page = 9;
+};
+
+// Room Deck - Adventurer Sets
+function generate_room_deck_adventurer_thieves_guild() {
+    // card_deck = [];
+    
+    card_deck.push(new Room_Card("Sewer Main", "{Sewers} Sewers \n Heroes in any {Sewers} Sewers may move to this room and Heroes in this room may move to any {Sewers} Sewers.", "{Thieves_Guild}"));
+    card_deck.push(new Room_Card("Hidden Tunnel", "{Sewers} Sewers \n When a Hero enters, either skip event draw or take event draw and move again.", "{Thieves_Guild}"));
+
+    cards_per_page = 9;
+};
+function generate_room_deck_adventurer_treasure_hunters() {
+    // card_deck = [];
+    
+    card_deck.push(new Room_Card("Armourer's Workshop", "{Armour} Armour \n {Armour} Armour in this room cannot be animated.", "{Treasure_Hunters}"));
+    card_deck.push(new Room_Card("Ancient Armoury", "{Armour} Armour \n Whenever a Hero with an {Item} Item enters this room, it gains +2 to next check against Wounded or Terrified.", "{Treasure_Hunters}"));
+
+    cards_per_page = 9;
+};
 
 
 function draw_size_pick() {
@@ -1120,6 +1193,14 @@ function setup_set_pick(type) {
             generate_miscellaneous_special();
 			break;
 		case kCards.RoomDeck:
+            generate_room_deck_base();
+
+            generate_room_deck_vampire_ravenous_beasts();
+            generate_room_deck_vampire_crumbling_fortress();
+            generate_room_deck_vampire_creeping_nightmare();
+
+            generate_room_deck_adventurer_thieves_guild();
+            generate_room_deck_adventurer_treasure_hunters();
 			break;
 		case kCards.AllCards:
 			generate_player_deck_vampire_base_deck();
