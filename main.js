@@ -1,10 +1,14 @@
-const m_canv = document.querySelector(".m_canv");
-let width = (m_canv.width = 400);
-let height = (m_canv.height = 400);
+const main_canvas = document.querySelector(".main_canvas");
+const back_canvas = document.querySelector(".back_canvas");
+let width = (main_canvas.width = 400);
+let height = (main_canvas.height = 400);
+back_canvas.width = 0;
+back_canvas.height = 0;
 
-const ctx = m_canv.getContext("2d");
-ctx.textAlign = "center";
-ctx.font = "20px Garamond";
+const main_ctx = main_canvas.getContext("2d");
+const back_ctx = back_canvas.getContext("2d");
+main_ctx.textAlign = "center";
+main_ctx.font = "20px Garamond";
 
 const kCards = {
     PlayerDeck_Vampire: 0, // Proof of Concept
@@ -23,6 +27,7 @@ const kCards = {
 
     DisasterBoonDeck: 13,
     SetRandomization: 14,
+    AllCards: 15
 };
 
 const kColors = {
@@ -37,13 +42,21 @@ const kColors = {
     Ghost_White: "rgb(255, 255, 255)"
 };
 
-const fronts = 0;
-const backs = 1;
+const kCardSide = {
+    Front: 0,
+    Back: 1
+};
+
+const kCardMirror = {
+    None: 0,
+    HFlip: 1, // For flip on long edge
+    VFlip: 2 // For flip on short edge
+};
 
 const up_down = 0;
 const left_right = 1;
 
-function embed_image(identifier, x, y, w, h) {
+function embed_image(ctx, identifier, x, y, w, h) {
 	let img = Alert_Icon;
 	switch (identifier) {
 		// case "{Spirit}":
@@ -148,7 +161,7 @@ function get_style_after_image(identifier) {
 	return [color, weight];
 };
 
-function interpret_text(text, x, y, w, h, line_height) {
+function interpret_text(ctx, text, x, y, w, h, line_height) {
 	// ctx.fillStyle = kColors.Slate_Black;
 	// ctx.textAlign = "center";
 	// ctx.font = (h*0.08)+"px Garamond";
@@ -193,10 +206,10 @@ function interpret_text(text, x, y, w, h, line_height) {
 
 	for (let i = 0; i < images.length; i++) {
 		let mod_x = -(ctx.measureText(lines[images[i].line]).width/2)+ctx.measureText(lines[images[i].line].slice(0, images[i].pos)).width;
-		embed_image(images[i].img, x+mod_x+2, y+((images[i].line-mod_height)*line_height)-42, line_height*0.9, line_height*0.9);
+		embed_image(ctx, images[i].img, x+mod_x+2, y+((images[i].line-mod_height)*line_height)-42, line_height*0.9, line_height*0.9);
 	}
 };
-function interpret_text_right_aligned(text, x, y, w, h, line_height) {
+function interpret_text_right_aligned(ctx, text, x, y, w, h, line_height) {
 	// ctx.fillStyle = kColors.Slate_Black;
 	// ctx.textAlign = "center";
 	// ctx.font = (h*0.08)+"px Garamond";
@@ -241,7 +254,7 @@ function interpret_text_right_aligned(text, x, y, w, h, line_height) {
 
 	for (let i = 0; i < images.length; i++) {
 		let mod_x = -(ctx.measureText(lines[images[i].line]).width)+ctx.measureText(lines[images[i].line].slice(0, images[i].pos)).width;
-		embed_image(images[i].img, x+mod_x+2, y+((images[i].line-mod_height)*line_height)-42, line_height, line_height);
+		embed_image(ctx, images[i].img, x+mod_x+2, y+((images[i].line-mod_height)*line_height)-42, line_height, line_height);
 	}
 };
 
@@ -254,7 +267,7 @@ class Cust_Button {
         this.text = text;
         this.on_click = on_click;
     }
-    draw() {
+    draw(ctx) {
         ctx.fillStyle = "rgb(125, 125, 125)";
         ctx.fillRect(this.x, this.y, this.w, this.h);
         ctx.fillStyle = "rgb(200, 200, 200)";
@@ -267,7 +280,7 @@ class Cust_Button {
     }
 };
 
-function draw_card_back(back_type, x, y, w, h, orient) {
+function draw_card_back(ctx, back_type, x, y, w, h, orient) {
     let text = "";
     switch (back_type) {
         case kCards.PlayerDeck_Vampire:
@@ -351,7 +364,7 @@ class Monster_Card {
 	get_name() {
 		return this.title;
 	}
-	draw(x, y, w, h, orient) {
+	draw(ctx, x, y, w, h, orient) {
 		ctx.strokeStyle = kColors.Slate_Black
 		ctx.lineWidth = 15;
 		ctx.beginPath();
@@ -373,32 +386,32 @@ class Monster_Card {
 		ctx.textAlign = "center";
 		ctx.font = (h*0.07)+"px Garamond";
         ctx.fillStyle = kColors.Blood_Red;
-		interpret_text(this.stats[0]+" {Health}", x+(w*0.235), y+(h*0.26), w, h, h*0.07);
+		interpret_text(ctx, this.stats[0]+" {Health}", x+(w*0.235), y+(h*0.26), w, h, h*0.07);
         ctx.fillStyle = kColors.Ghostly_Blue;
-		interpret_text(this.stats[1]+" {Wisdom}", x+(w*0.415), y+(h*0.26), w, h, h*0.07);
+		interpret_text(ctx, this.stats[1]+" {Wisdom}", x+(w*0.415), y+(h*0.26), w, h, h*0.07);
         ctx.fillStyle = kColors.Unholy_Orange;
-		interpret_text(this.stats[2]+" {Might}", x+(w*0.595), y+(h*0.26), w, h, h*0.07);
+		interpret_text(ctx, this.stats[2]+" {Might}", x+(w*0.595), y+(h*0.26), w, h, h*0.07);
         ctx.fillStyle = kColors.Demonic_Purple;
-		interpret_text(this.stats[3]+" {Power}", x+(w*0.775), y+(h*0.26), w, h, h*0.07);
+		interpret_text(ctx, this.stats[3]+" {Power}", x+(w*0.775), y+(h*0.26), w, h, h*0.07);
 
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.textAlign = "center";
 
 		// ctx.font = (h*0.07)+"px Garamond";
 		ctx.font = (h*0.06)+"px Garamond";
-		interpret_text(this.special, x+(w/2), y+(h*0.53), w, h, h*0.06);
+		interpret_text(ctx, this.special, x+(w/2), y+(h*0.53), w, h, h*0.06);
 
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.textAlign = "center";
 		ctx.font = (h*0.07)+"px Garamond";
-		interpret_text(this.type, x+(w*0.5), y+(h*0.95), w*0.9, h, h*0.07);
+		interpret_text(ctx, this.type, x+(w*0.5), y+(h*0.95), w*0.9, h, h*0.07);
 
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.font = (h*0.07)+"px Garamond";
-		interpret_text(this.set, x+(w*0.92), y+(h*0.95), w, h, h*0.07);
+		interpret_text(ctx, this.set, x+(w*0.92), y+(h*0.95), w, h, h*0.07);
 	}
-	draw_back(x, y, w, h, orient) {
-		draw_card_back(this.back_type, x, y, w, h, orient);
+	draw_back(ctx, x, y, w, h, orient) {
+		draw_card_back(ctx, this.back_type, x, y, w, h, orient);
 	}
 };
 class Standard_Card {
@@ -418,7 +431,7 @@ class Standard_Card {
 	get_name() {
 		return this.title;
 	}
-	draw(x, y, w, h, orient) {
+	draw(ctx, x, y, w, h, orient) {
 		ctx.strokeStyle = kColors.Slate_Black
 		ctx.lineWidth = 15;
 		ctx.beginPath();
@@ -434,19 +447,19 @@ class Standard_Card {
 		ctx.textAlign = "center";
 		// ctx.font = (h*0.08)+"px Garamond";
 		ctx.font = (h*0.06)+"px Garamond";
-		interpret_text(this.text, x+(w/2), y+(h*0.44), w, h, h*0.06);
+		interpret_text(ctx, this.text, x+(w/2), y+(h*0.44), w, h, h*0.06);
 
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.textAlign = "center";
 		ctx.font = (h*0.07)+"px Garamond";
-		interpret_text(this.type, x+(w*0.5), y+(h*0.95), w*0.9, h, h*0.07);
+		interpret_text(ctx, this.type, x+(w*0.5), y+(h*0.95), w*0.9, h, h*0.07);
 
 		ctx.fillStyle = kColors.Slate_Black;
 		ctx.font = (h*0.07)+"px Garamond";
-		interpret_text(this.set, x+(w*0.92), y+(h*0.95), w, h, h*0.07);
+		interpret_text(ctx, this.set, x+(w*0.92), y+(h*0.95), w, h, h*0.07);
 	}
-	draw_back(x, y, w, h, orient) {
-		draw_card_back(this.back_type, x, y, w, h, orient);
+	draw_back(ctx, x, y, w, h, orient) {
+		draw_card_back(ctx, this.back_type, x, y, w, h, orient);
 	}
 };
 class Room_Card {
@@ -462,7 +475,7 @@ class Room_Card {
 	get_name() {
 		return this.title;
 	}
-	draw(x, y, w, h, orient) {
+	draw(ctx, x, y, w, h, orient) {
 		ctx.strokeStyle = kColors.Slate_Black
 		ctx.lineWidth = 15;
 		ctx.beginPath();
@@ -481,7 +494,7 @@ class Room_Card {
 		ctx.font = (h*0.05)+"px Garamond";
 		interpret_text_right_aligned(this.special, x+(w*0.96), y+(h*0.96), w, h, h*0.05);
 	}
-	draw_back(x, y, w, h, orient) {
+	draw_back(ctx, x, y, w, h, orient) {
 		
 	}
 };
@@ -712,7 +725,7 @@ function generate_boon_deck() {
 };
 
 // Small Items Deck
-function generate_player_small_item_deck() {
+function generate_small_item_deck() {
 	// card_deck = [];
 	
     card_deck.push(new Standard_Card("Rusty Mail", "+1 {Health} Health, +1 {Wisdom} Wisdom \n \n This Small {Item} Item stays with the Hero.", "Small {Item} Item", "", kCards.SmallItemsDeck));
@@ -793,54 +806,54 @@ function generate_miscellaneous_special() {
 
 
 function draw_size_pick() {
-    ctx.fillStyle = "rgb(200, 200, 200)";
-    ctx.fillRect(0, 0, width, height);
+    main_ctx.fillStyle = "rgb(200, 200, 200)";
+    main_ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = "rgb(50, 50, 50)";
-	ctx.font = "40px Garamond"
-    ctx.fillText("Haunted House", width*0.5, 50);
-	ctx.font = "20px Garamond"
-    ctx.fillText("Card Generator", width*0.5, 80);
-    ctx.fillText("Pick a paper size.", width*0.5, 150);
+    main_ctx.fillStyle = "rgb(50, 50, 50)";
+	main_ctx.font = "40px Garamond"
+    main_ctx.fillText("Haunted House", width*0.5, 50);
+	main_ctx.font = "20px Garamond"
+    main_ctx.fillText("Card Generator", width*0.5, 80);
+    main_ctx.fillText("Pick a paper size.", width*0.5, 150);
     
     for (let i = 0; i < buttons.length; i++) {
-        buttons[i].draw();
+        buttons[i].draw(main_ctx);
     }
 };
 
 function draw_type_pick() {
-    ctx.fillStyle = "rgb(200, 200, 200)";
-    ctx.fillRect(0, 0, width, height);
+    main_ctx.fillStyle = "rgb(200, 200, 200)";
+    main_ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = "rgb(50, 50, 50)";
-	ctx.font = "40px Garamond"
-    ctx.fillText("Haunted House", width*0.5, 50);
-	ctx.font = "20px Garamond"
-    ctx.fillText("Card Generator", width*0.5, 80);
-    ctx.fillText("Pick a type of cards.", width*0.5, 150);
+    main_ctx.fillStyle = "rgb(50, 50, 50)";
+	main_ctx.font = "40px Garamond"
+    main_ctx.fillText("Haunted House", width*0.5, 50);
+	main_ctx.font = "20px Garamond"
+    main_ctx.fillText("Card Generator", width*0.5, 80);
+    main_ctx.fillText("Pick a type of cards.", width*0.5, 150);
     
     for (let i = 0; i < buttons.length; i++) {
-        buttons[i].draw();
+        buttons[i].draw(main_ctx);
     }
 };
 
 function draw_set_pick() {
-    ctx.fillStyle = "rgb(200, 200, 200)";
-    ctx.fillRect(0, 0, width, height);
+    main_ctx.fillStyle = "rgb(200, 200, 200)";
+    main_ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = "rgb(50, 50, 50)";
-	ctx.font = "40px Garamond"
-    ctx.fillText("Haunted House", width*0.5, 50);
-	ctx.font = "20px Garamond"
-    ctx.fillText("Card Generator", width*0.5, 80);
-    ctx.fillText("Pick a set of cards.", width*0.5, 150);
+    main_ctx.fillStyle = "rgb(50, 50, 50)";
+	main_ctx.font = "40px Garamond"
+    main_ctx.fillText("Haunted House", width*0.5, 50);
+	main_ctx.font = "20px Garamond"
+    main_ctx.fillText("Card Generator", width*0.5, 80);
+    main_ctx.fillText("Pick a set of cards.", width*0.5, 150);
     
     for (let i = 0; i < buttons.length; i++) {
-        buttons[i].draw();
+        buttons[i].draw(main_ctx);
     }
 };
 
-function draw_card_disp(set, side = fronts) {
+function draw_card_disp(ctx, set, side = kCardSide.Front, mirror = kCardMirror.None) {
     ctx.fillStyle = kColors.Ghost_White;
     ctx.fillRect(0, 0, width, height);
     
@@ -886,10 +899,16 @@ function draw_card_disp(set, side = fronts) {
         let y = (modi % per_col);
 		let w = (width/per_row);
 		let h = (height/per_col);
-		if (side === backs) {
-			card_deck[i].draw_back(x*w+1, y*h+1, w-2, h-2, orient, y+1);
-		}else if (side === fronts) {
-			card_deck[i].draw(x*w+1, y*h+1, w-2, h-2, orient, y+1);
+        if (mirror === kCardMirror.HFlip) {
+            x = (cards_per_page/per_col) - x - 1;
+        }
+        if (mirror === kCardMirror.VFlip) {
+            y = per_col - y - 1;
+        }
+		if (side === kCardSide.Back) {
+			card_deck[i].draw_back(ctx, x*w+1, y*h+1, w-2, h-2, orient, y+1);
+		}else if (side === kCardSide.Front) {
+			card_deck[i].draw(ctx, x*w+1, y*h+1, w-2, h-2, orient, y+1);
 		}
     }
 
@@ -933,44 +952,74 @@ function generate_button(button_title, iterations, mody) {
 	let funct = function() {};
 	switch (iterations) {
 		case 0:
-			funct = function() {setup_card_disp(0, fronts);};
+			funct = function() {setup_card_disp(0, kCardSide.Front);};
 			break;
 		case 1:
-			funct = function() {setup_card_disp(1, fronts);};
+			funct = function() {setup_card_disp(1, kCardSide.Front);};
 			break;
 		case 2:
-			funct = function() {setup_card_disp(2, fronts);};
+			funct = function() {setup_card_disp(2, kCardSide.Front);};
 			break;
 		case 3:
-			funct = function() {setup_card_disp(3, fronts);};
+			funct = function() {setup_card_disp(3, kCardSide.Front);};
 			break;
 		case 4:
-			funct = function() {setup_card_disp(4, fronts);};
+			funct = function() {setup_card_disp(4, kCardSide.Front);};
 			break;
 		case 5:
-			funct = function() {setup_card_disp(5, fronts);};
+			funct = function() {setup_card_disp(5, kCardSide.Front);};
 			break;
 		case 6:
-			funct = function() {setup_card_disp(6, fronts);};
+			funct = function() {setup_card_disp(6, kCardSide.Front);};
 			break;
 		case 7:
-			funct = function() {setup_card_disp(7, fronts);};
+			funct = function() {setup_card_disp(7, kCardSide.Front);};
 			break;
 		case 8:
-			funct = function() {setup_card_disp(8, fronts);};
+			funct = function() {setup_card_disp(8, kCardSide.Front);};
 			break;
 		case 9:
-			funct = function() {setup_card_disp(9, fronts);};
+			funct = function() {setup_card_disp(9, kCardSide.Front);};
 			break;
 		case 10:
-			funct = function() {setup_card_disp(10, fronts);};
+			funct = function() {setup_card_disp(10, kCardSide.Front);};
+			break;
+		case 11:
+			funct = function() {setup_card_disp(11, kCardSide.Front);};
+			break;
+		case 12:
+			funct = function() {setup_card_disp(12, kCardSide.Front);};
+			break;
+		case 13:
+			funct = function() {setup_card_disp(13, kCardSide.Front);};
+			break;
+		case 14:
+			funct = function() {setup_card_disp(14, kCardSide.Front);};
+			break;
+		case 15:
+			funct = function() {setup_card_disp(15, kCardSide.Front);};
+			break;
+		case 16:
+			funct = function() {setup_card_disp(16, kCardSide.Front);};
+			break;
+		case 17:
+			funct = function() {setup_card_disp(17, kCardSide.Front);};
+			break;
+		case 18:
+			funct = function() {setup_card_disp(18, kCardSide.Front);};
+			break;
+		case 19:
+			funct = function() {setup_card_disp(19, kCardSide.Front);};
+			break;
+		case 20:
+			funct = function() {setup_card_disp(20, kCardSide.Front);};
 			break;
 	}
 	buttons.push(new Cust_Button((width*0.5)-200, 275+(75*iterations)+mody, 400, 50, button_title, funct));
 };
 
-m_canv.addEventListener("click", function(event) {
-    click(event.clientX-m_canv.getBoundingClientRect().left, event.clientY-m_canv.getBoundingClientRect().top);
+main_canvas.addEventListener("click", function(event) {
+    click(event.clientX-main_canvas.getBoundingClientRect().left, event.clientY-main_canvas.getBoundingClientRect().top);
 });
 
 function setup_size_pick() {
@@ -986,10 +1035,10 @@ function setup_size_pick() {
     draw_size_pick();
 };
 function setup_type_pick(sizex, sizey) {
-    width = (m_canv.width = sizex);
-    height = (m_canv.height = sizey);
-    ctx.textAlign = "center";
-    ctx.font = "20px Garamond";
+    width = (main_canvas.width = sizex);
+    height = (main_canvas.height = sizey);
+    main_ctx.textAlign = "center";
+    main_ctx.font = "20px Garamond";
     buttons = [];
     buttons.push(new Cust_Button((width*0.5)-200, 200+(75*0), 400, 50, "Player Deck - Vampire", function() {
         setup_set_pick(kCards.PlayerDeck_Vampire);
@@ -1024,14 +1073,14 @@ function setup_type_pick(sizex, sizey) {
     buttons.push(new Cust_Button((width*0.5)-200, 200+(75*10), 400, 50, "Room Deck", function() {
         setup_set_pick(kCards.RoomDeck);
     }));
-    // buttons.push(new Cust_Button((width*0.5)-200, 200+(75*12), 400, 50, "New Cards - Good", function() {
-    //     setup_set_pick(kCards.NEW_GOOD);
-    // }));
+    buttons.push(new Cust_Button((width*0.5)-200, 200+(75*12), 400, 50, "All Cards", function() {
+        setup_set_pick(kCards.AllCards);
+    }));
     draw_type_pick();
 };
 function setup_set_pick(type) {
-    ctx.textAlign = "center";
-    ctx.font = "20px Garamond";
+    main_ctx.textAlign = "center";
+    main_ctx.font = "20px Garamond";
 	
 	switch (type) {
 		case kCards.PlayerDeck_Vampire:
@@ -1061,7 +1110,7 @@ function setup_set_pick(type) {
             generate_boon_deck();
 			break;
 		case kCards.SmallItemsDeck:
-            generate_player_small_item_deck();
+            generate_small_item_deck();
 			break;
 		case kCards.SetRandomization:
             generate_set_randomization_vampire_deck();
@@ -1072,12 +1121,32 @@ function setup_set_pick(type) {
 			break;
 		case kCards.RoomDeck:
 			break;
+		case kCards.AllCards:
+			generate_player_deck_vampire_base_deck();
+			generate_player_deck_vampire_ravenous_beasts_deck();
+            generate_player_deck_vampire_crumbling_fortress_deck();
+            generate_player_deck_vampire_creeping_nightmare_deck();
+
+            generate_player_deck_adventurers_base_deck();
+            generate_player_deck_adventurers_thieves_guild_deck();
+            generate_player_deck_adventurers_treasure_hunters_deck();
+            
+            generate_time_deck();
+            generate_event_deck();
+            generate_hero_deck();
+            generate_disaster_deck();
+            generate_boon_deck();
+            generate_small_item_deck();
+            generate_set_randomization_vampire_deck();
+            generate_set_randomization_adventurers_deck();
+            generate_miscellaneous_special();
+			break;
 	}
 	
     buttons = [];
 	
 	buttons.push(new Cust_Button((width*0.5)-100, 200, 200, 50, "Card Backs", function() {
-		setup_card_disp(0, backs);
+		setup_card_disp(0, kCardSide.Back);
 	}));
 	let mody = 0;
 	
@@ -1096,9 +1165,12 @@ function setup_set_pick(type) {
 	}
     draw_set_pick();
 };
-function setup_card_disp(set, backs = false) {
+function setup_card_disp(set, backs = kCardSide.Front) {
+    back_canvas.width = width;
+    back_canvas.height = height;
     buttons = [];
-    draw_card_disp(set, backs);
+    draw_card_disp(main_ctx, set, kCardSide.Front, kCardMirror.None);
+    draw_card_disp(back_ctx, set, kCardSide.Back, kCardMirror.HFlip); // Correct for flip on longe edge double sided
 };
 
 
