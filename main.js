@@ -35,8 +35,8 @@ const kColors = {
     Unholy_Orange: "rgb(177, 82, 53)",
     Demonic_Purple: "rgb(184, 38, 177)",
     Ghostly_Blue: "rgb(41, 89, 166)",
-    Ominous_Yellow: "rgb(173, 173, 23)",
-    Noxious_Green: "rgb(20, 121, 45)",
+    Ominous_Yellow: "rgb(167, 147, 21)",
+    Noxious_Green: "rgb(15, 104, 37)",
     Dingy_Gray: "rgb(66, 66, 66)",
     Slate_Black: "rgb(0, 0, 0)",
     Ghost_White: "rgb(255, 255, 255)"
@@ -80,9 +80,6 @@ function embed_image(ctx, identifier, x, y, w, h) {
 		case "{Power}":
 			img = Power_Icon;
 			break;
-		// case "{Power}":
-		// 	img = Blast_Icon;
-		// 	break;
 		case "{Lit}":
 			img = Lit_Icon;
 			break;
@@ -104,6 +101,89 @@ function embed_image(ctx, identifier, x, y, w, h) {
 		case "{Vampire}":
 			img = Damage_Icon;
 			break;
+		case "{Ruins}":
+			img = Ruins_Icon;
+			break;
+		case "{Sewers}":
+			img = Sewers_Icon;
+			break;
+		case "{Aura}":
+			img = Aura_Icon;
+			break;
+		case "{Monster}":
+			img = Monster_Icon;
+			break;
+		case "{Event}":
+			img = Event_Icon;
+			break;
+		case "{Instant}":
+			img = Event_Icon;
+			break;
+		case "{Item}":
+			img = Item_Icon;
+			break;
+		case "{Feature}":
+			img = Ruins_Icon;
+			break;
+		case "{Ratman}":
+			img = Ratman_Icon;
+			break;
+		case "{Day}":
+			img = Day_Icon;
+			break;
+		case "{Night}":
+			img = Night_Icon;
+			break;
+		case "{Base}":
+			img = Base_Icon;
+			break;
+
+		case "{Ravenous_Beasts}":
+			img = Ravenous_Beasts_Icon;
+			break;
+		case "{Crumbling_Fortress}":
+			img = Crumbling_Fortress_Icon;
+			break;
+		case "{Creeping_Nightmare}":
+			img = Creeping_Nightmare_Icon;
+			break;
+		case "{Vermin_Swarm}":
+			img = Vermin_Swarm_Icon;
+			break;
+		case "{Sleepless_Guardians}":
+			img = Sleepless_Guardians_Icon;
+			break;
+		case "{Insatiable_Ghouls}":
+			img = Insatiable_Ghouls_Icon;
+			break;
+		case "{Foul_Plaguebearers}":
+			img = Foul_Plaguebearers_Icon;
+			break;
+		case "{Malevolent_Poltergeists}":
+			img = Malevolent_Poltergeists_Icon;
+			break;
+		case "{Malign_Necromancers}":
+			img = Malign_Necromancers_Icon;
+			break;
+
+		case "{Thieves_Guild}":
+			img = Thieves_Guild_Icon;
+			break;
+		case "{Treasure_Hunters}":
+			img = Treasure_Hunters_Icon;
+			break;
+		case "{Northern_Barbarians}":
+			img = Northern_Barbarians_Icon;
+			break;
+		case "{Noble_Knights}":
+			img = Noble_Knights_Icon;
+			break;
+		case "{Ancient_Clan}":
+			img = Ancient_Clan_Icon;
+			break;
+		case "{Order_of_Magi}":
+			img = Order_of_Magi_Icon;
+			break;
 	}
 	ctx.drawImage(img, Math.round(x), Math.round(y), Math.round(w), Math.round(h));
 };
@@ -112,15 +192,6 @@ function get_style_after_image(identifier) {
 	let color = kColors.Slate_Black;
     let weight = "bold";
 	switch (identifier) {
-		// case "{Spirit}":
-        //     color = kColors.Ghostly_Blue;
-		// 	break;
-		// case "{Unholy}":
-        //     color = kColors.Unholy_Orange;
-		// 	break;
-		// case "{Demon}":
-        //     color = kColors.Demonic_Purple;
-		// 	break;
 		case "{Health}":
             color = kColors.Blood_Red;
 			break;
@@ -133,9 +204,6 @@ function get_style_after_image(identifier) {
 		case "{Power}":
             color = kColors.Demonic_Purple;
 			break;
-		// case "{Power}":
-        //     color = kColors.Demonic_Purple;
-		// 	break;
 		case "{Lit}":
             color = kColors.Ominous_Yellow;
 			break;
@@ -156,6 +224,39 @@ function get_style_after_image(identifier) {
 			break;
 		case "{Vampire}":
             color = kColors.Blood_Red;
+			break;
+		case "{Ruins}":
+            color = kColors.Dingy_Gray;
+			break;
+		case "{Sewers}":
+            color = kColors.Noxious_Green;
+			break;
+		case "{Aura}":
+            color = kColors.Ghostly_Blue;
+			break;
+		case "{Monster}":
+            color = kColors.Blood_Red;
+			break;
+		case "{Event}":
+            color = kColors.Ominous_Yellow;
+			break;
+		case "{Instant}":
+            color = kColors.Unholy_Orange;
+			break;
+		case "{Item}":
+            color = kColors.Unholy_Orange;
+			break;
+		case "{Feature}":
+            color = kColors.Dingy_Gray;
+			break;
+		case "{Ratman}":
+            color = kColors.Blood_Red;
+			break;
+		case "{Day}":
+            color = kColors.Ominous_Yellow;
+			break;
+		case "{Night}":
+            color = kColors.Dingy_Gray;
 			break;
 	}
 	return [color, weight];
@@ -206,7 +307,7 @@ function interpret_text(ctx, text, x, y, w, h, line_height) {
 
 	for (let i = 0; i < images.length; i++) {
 		let mod_x = -(ctx.measureText(lines[images[i].line]).width/2)+ctx.measureText(lines[images[i].line].slice(0, images[i].pos)).width;
-		embed_image(ctx, images[i].img, x+mod_x+2, y+((images[i].line-mod_height)*line_height)-42, line_height*0.9, line_height*0.9);
+		embed_image(ctx, images[i].img, x+mod_x+2, y+((images[i].line-mod_height)*line_height)-42, line_height*0.85, line_height*0.85);
 	}
 };
 function interpret_text_right_aligned(ctx, text, x, y, w, h, line_height) {
@@ -255,7 +356,7 @@ function interpret_text_right_aligned(ctx, text, x, y, w, h, line_height) {
 
 	for (let i = 0; i < images.length; i++) {
 		let mod_x = -(ctx.measureText(lines[images[i].line]).width)+ctx.measureText(lines[images[i].line].slice(0, images[i].pos)).width;
-		embed_image(ctx, images[i].img, x+mod_x+2, y+((images[i].line-mod_height)*line_height)-42, line_height, line_height);
+		embed_image(ctx, images[i].img, x+mod_x+2, y+((images[i].line-mod_height)*line_height)-42, line_height*0.85, line_height*0.85);
 	}
 };
 
@@ -639,10 +740,10 @@ function generate_time_deck() {
         card_deck.push(new Standard_Card("Ill Omens", "Modify the Event Deck to increase the danger level.", "", "", kCards.TimeDeck));
     }
     for (let i = 0; i < 10; i++) { // 10
-        card_deck.push(new Standard_Card("Night Falls", "Time of Day becomes Night. Vampire may draw to 10 cards in hand.", "", "", kCards.TimeDeck));
+        card_deck.push(new Standard_Card("Night Falls", "Time of Day becomes {Night} Night. Vampire may draw to 10 cards in hand.", "", "", kCards.TimeDeck));
     }
     for (let i = 0; i < 10; i++) { // 10
-        card_deck.push(new Standard_Card("Sunrise", "Time of Day becomes Day. Adventurers may draw to 10 cards in hand. Reset attempts on Features and rooms.", "", "", kCards.TimeDeck));
+        card_deck.push(new Standard_Card("Sunrise", "Time of Day becomes {Day} Day. Adventurers may draw to 10 cards in hand. Reset attempts on Features and rooms.", "", "", kCards.TimeDeck));
     }
     card_deck.push(new Standard_Card("Overwhelming Darkness", "All Heroes flee the castle. The Vampire wins the game.", "", "", kCards.TimeDeck));
 
@@ -691,7 +792,7 @@ function generate_hero_deck() {
     card_deck.push(new Monster_Card("Artificer", [8, 7, 4, 5], "May equip up to 5 {Item} Items. \n \n On death: Equip up to 3 equipped {Item} Items to 3 different Heroes.", "", "", kCards.HeroDeck));
     card_deck.push(new Monster_Card("Ranger", [7, 8, 5, 4], "Whenever a Monster enters the room or this Hero enters a room with a Monster, this Hero may make a single attack roll. \n \n On death: Deal 1 {Damage} Damage each to the {Health} Health and {Wisdom} Wisdom of the nearest Monster.", "", "", kCards.HeroDeck));
     card_deck.push(new Monster_Card("Paladin", [8, 7, 5, 4], "Whenever this Hero suffers {Damage} Damage, it may make a single attack roll against any Monster in the room. \n \n On death: Nearest Hero ignores next source of {Damage} Damage.", "", "", kCards.HeroDeck));
-    card_deck.push(new Monster_Card("Seer", [7, 8, 4, 5], "During the Day, after revealing the draw from the Event Deck, this Hero may decide not to move. \n \n On death: Adventurers may view and reorder the top 6 cards of the Event Deck and may discard one.", "", "", kCards.HeroDeck));
+    card_deck.push(new Monster_Card("Seer", [7, 8, 4, 5], "During the {Day} Day, after revealing the draw from the Event Deck, this Hero may decide not to move. \n \n On death: Adventurers may view and reorder the top 6 cards of the Event Deck and may discard one.", "", "", kCards.HeroDeck));
     card_deck.push(new Monster_Card("Sorcerer", [8, 7, 4, 5], "After triggering a Good event of any kind, gain +1 to all stats until taking {Damage} Damage. \n \n On death: Two Heroes immediately trigger Good {Event} Events.", "", "", kCards.HeroDeck));
     card_deck.push(new Monster_Card("Adventurer", [7, 8, 5, 4], "May ignore the text of rooms. \n \n On death: Reveal any unexplored room.", "", "", kCards.HeroDeck));
     card_deck.push(new Monster_Card("Druid", [8, 7, 4, 5], "Receive grevious {Damage} Damage as regular {Damage} Damage. \n \n On death: Heal 1 {Damage} Damage each to the {Health} Health and {Wisdom} Wisdom of any Hero.", "", "", kCards.HeroDeck));
@@ -774,7 +875,7 @@ function generate_set_randomization_adventurers_deck() {
     card_deck.push(new Standard_Card("Thieves' Guild", "{Thieves_Guild} Thieves' Guild: \n Training from the bitter streets grants lithe and graceful speed to the crafty heroes' feet.", "Adventurers", "", kCards.SetRandomization_Adventurers));
     card_deck.push(new Standard_Card("Treasure Hunters", "{Treasure_Hunters} Treasure Hunters: \n Seeking ancient spoils they come, looting and uncovering aged weapons of great power.", "Adventurers", "", kCards.SetRandomization_Adventurers));
     card_deck.push(new Standard_Card("Northern Barbarians", "{Northern_Barbarians} Northern Barbarians: \n Fearing no wound nor death itself, the heroes come with a zeal for battle in defense of homeland.", "Adventurers", "", kCards.SetRandomization_Adventurers));
-    card_deck.push(new Standard_Card("Noble Nights", "{Noble_Nights} Noble Nights: \n Armoured and well used to battle's danger, the valiant heroes seek glory and protection for the land.", "Adventurers", "", kCards.SetRandomization_Adventurers));
+    card_deck.push(new Standard_Card("Noble Knights", "{Noble_Knights} Noble Knights: \n Armoured and well used to battle's danger, the valiant heroes seek glory and protection for the land.", "Adventurers", "", kCards.SetRandomization_Adventurers));
     card_deck.push(new Standard_Card("Ancient Clan", "{Ancient_Clan} Ancient Clan: \n Skilled in arts forgotten and armed with knowledge of their foes, the heroes do battle with evil once more.", "Adventurers", "", kCards.SetRandomization_Adventurers));
     card_deck.push(new Standard_Card("Order of Magi", "{Order_of_Magi} Order of Magi: \n Endowed with the gift of magic, the heroes wield arcane arts to shield themselves and ward evil.", "Adventurers", "", kCards.SetRandomization_Adventurers));
 
@@ -799,7 +900,7 @@ function generate_miscellaneous_special() {
         card_deck.push(new Monster_Card("Ratman", [4, 4, 3, 3], "If {Sewer} Sewer, may move to any {Sewer} Sewer. On death, drop a {Bones} Bones.", "Small {Monster} Monster", "", kCards.MiscSpecial));
     }
     for (let i = 0; i < 8; i++) {
-        card_deck.push(new Monster_Card("Zombie", [3, 3, 2, 2], "On death, instead remain dormant until a Hero enters the room, then respawn. When it respawns during Day, it gain -1 to all stats.", "Small {Monster} Monster", "", kCards.MiscSpecial));
+        card_deck.push(new Monster_Card("Zombie", [3, 3, 2, 2], "On death, instead remain dormant until a Hero enters the room, then respawn. When it respawns during {Day} Day, it gain -1 to all stats.", "Small {Monster} Monster", "", kCards.MiscSpecial));
     }
 
 	cards_per_page = 16;
@@ -815,14 +916,14 @@ function generate_room_deck_base() {
     card_deck.push(new Room_Card("Bedroom", "{Bones} Bones \n Victory after third flee. \n No ambush when found. \n Flee max 3 rooms.", "{Base}"));
     card_deck.push(new Room_Card("Entrance Hall", "Always {Lit} Lit.", "{Base}"));
 
-    card_deck.push(new Room_Card("Library", "{Armour} Armour, {Aura} Aura \n 5+ check to heal 1 {Damage} Damage from {Wisdom} Wisdom. Evil {Event} Event if failed. -1 if Night, -2 each for first two successes.", "{Base}"));
-    card_deck.push(new Room_Card("Library", "{Armour} Armour, {Aura} Aura \n 5+ check to view the top 6 cards of the Event Deck, reorder, and may discard 1. If failed, Vampire may instead. -1 if Night, -2 each for first two successes.", "{Base}"));
-    card_deck.push(new Room_Card("Pantry", "{Armour} Armour, {Ruins} Ruins \n 5+ check to heal 1 {Damage} Damage from {Health} Health. Evil {Event} Event if failed. -1 if Night, -2 each for first two successes.", "{Base}"));
-    card_deck.push(new Room_Card("Pantry", "{Armour} Armour, {Ruins} Ruins \n 5+ check to gain immune to all {Damage} Damage for 3 turns. Evil {Event} Event if failed. -1 if Night, -2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Library", "{Armour} Armour, {Aura} Aura \n 5+ check to heal 1 {Damage} Damage from {Wisdom} Wisdom. Evil {Event} Event if failed. -1 if {Night} Night, -2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Library", "{Armour} Armour, {Aura} Aura \n 5+ check to view the top 6 cards of the Event Deck, reorder, and may discard 1. If failed, Vampire may instead. -1 if {Night} Night, -2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Pantry", "{Armour} Armour, {Ruins} Ruins \n 5+ check to heal 1 {Damage} Damage from {Health} Health. Evil {Event} Event if failed. -1 if {Night} Night, -2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Pantry", "{Armour} Armour, {Ruins} Ruins \n 5+ check to gain immune to all {Damage} Damage for 3 turns. Evil {Event} Event if failed. -1 if {Night} Night, -2 each for first two successes.", "{Base}"));
     card_deck.push(new Room_Card("Vault", "{Armour} Armour, {Sewers} Sewers \n Contains two small items and a small monster when revealed.", "{Base}"));
     card_deck.push(new Room_Card("Vault", "{Armour} Armour, {Sewers} Sewers \n Good events are always {Item} Item, Evil events are always {Monster} Monster. On first enter, skip event draw and trigger one of each, Good first.", "{Base}"));
-    card_deck.push(new Room_Card("Magician's Chamber", "{Sewers} Sewers, {Aura} Aura \n May suffer a {Power} Power 5 attack. If undamaged, may view Vampire's hand. +1 if Night, +2 each for first two successes.", "{Base}"));
-    card_deck.push(new Room_Card("Magician's Chamber", "{Sewers} Sewers, {Aura} Aura \n May suffer a {Might} Might 5 attack. If undamaged, may reveal an unexplored room. +1 if Night, +2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Magician's Chamber", "{Sewers} Sewers, {Aura} Aura \n May suffer a {Power} Power 5 attack. If undamaged, may view Vampire's hand. +1 if {Night} Night, +2 each for first two successes.", "{Base}"));
+    card_deck.push(new Room_Card("Magician's Chamber", "{Sewers} Sewers, {Aura} Aura \n May suffer a {Might} Might 5 attack. If undamaged, may reveal an unexplored room. +1 if {Night} Night, +2 each for first two successes.", "{Base}"));
 
 	cards_per_page = 9;
 };
