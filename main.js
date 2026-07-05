@@ -720,7 +720,7 @@ function generate_player_deck_adventurers_treasure_hunters_deck() {
     card_deck.push(new Standard_Card("Salvage", "Play when an item would be lost. \n \n Equip the item to the nearest Hero. Equipped Hero gains +1 to all stats until taking {Damage} Damage.", "{Instant} Instant", "{Treasure_Hunters}", kCards.PlayerDeck_Adventurers));
     card_deck.push(new Standard_Card("Crippling Flail", "When your first swing in combat deals {Damage} Damage, make the combat a surprise attack. May discard this to immediately perform a surprise attack. \n \n This {Item} Item stays with the Hero.", "{Item} Item", "{Treasure_Hunters}", kCards.PlayerDeck_Adventurers));
     card_deck.push(new Standard_Card("Guard's Halberd", "When a Monster is summoned in or enters the room, +2 to next attack. When a Monster in the room is slain, +2 to next check to survive. May discard this to gain +4 to next attack. \n \n This {Item} Item stays with the Hero.", "{Item} Item", "{Treasure_Hunters}", kCards.PlayerDeck_Adventurers));
-    card_deck.push(new Standard_Card("Plentiful Hoards", "Play when a room is explored. \n \n In these two rooms, replace all Good {Events} Events with Good {Item} Item events and when an {Item} Item is lost, return it to your hand. \n \n This {Feature} Feature remains on the board.", "{Item} Item", "{Treasure_Hunters}", kCards.PlayerDeck_Adventurers));
+    card_deck.push(new Standard_Card("Plentiful Hoards", "Play when a room is explored. \n \n In these two rooms, replace all Good {Event} Events with Good {Item} Item events and when an {Item} Item is lost, return it to your hand. \n \n This {Feature} Feature remains on the board.", "{Item} Item", "{Treasure_Hunters}", kCards.PlayerDeck_Adventurers));
     card_deck.push(new Standard_Card("Ancient Longsword", "Every time an attack misses, +1 to attacks until next hit. If {Armour} Armour, +1 to checks against Wounded and Terrified. May discard this item to ignore a failed check against Wounded or Terrified. \n \n This {Item} Item stays with the Hero.", "{Item} Item", "{Treasure_Hunters}", kCards.PlayerDeck_Adventurers));
 
 	cards_per_page = 16;
@@ -888,8 +888,8 @@ function generate_miscellaneous_special() {
 	
     card_deck.push(new Standard_Card("The Charm", "+1 against attacks except {Vampire} Vampire attacks. \n When the {Vampire} Vampire attacks you, it always misses on an 8 or lower. \n \n This Special {Item} Item remains with the Hero. When it would be lost, drop it instead. One Hero cannot hold both the Charm and the Sword.", "Special {Item} Item", "", kCards.MiscSpecial));
     card_deck.push(new Standard_Card("The Sword", "+2 to attacks except against the {Vampire} Vampire. \n When you attack the {Vampire} Vampire, always hit on a 7 or greater. \n \n This Special {Item} Item remains with the Hero. When it would be lost, drop it instead. One Hero cannot hold both the Charm and the Sword.", "Special {Item} Item", "", kCards.MiscSpecial));
-    card_deck.push(new Monster_Card("Awakened Vampire", [10, 8, 7, 6], "Placed when a Hero enters the Crypt. May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 4 {Damage} Damage taken, it flees, returning as the Enraged Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
-    card_deck.push(new Monster_Card("Enraged Vampire", [8, 6, 6, 5], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 4 {Damage} Damage taken, it flees, returning as the Injured Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
+    card_deck.push(new Monster_Card("Awakened Vampire", [10, 8, 5, 4], "Placed when a Hero enters the Crypt. May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 4 {Damage} Damage taken, it flees, returning as the Enraged Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
+    card_deck.push(new Monster_Card("Enraged Vampire", [8, 6, 7, 6], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 4 {Damage} Damage taken, it flees, returning as the Injured Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
     card_deck.push(new Monster_Card("Injured Vampire", [8, 6, 6, 5], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 3 {Damage} Damage taken, it flees, returning as the Desperate Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
     card_deck.push(new Monster_Card("Desperate Vampire", [7, 6, 5, 4], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 3 {Damage} Damage taken, it flees, returning as the Maimed Vampire.", "Special {Monster} Monster", "", kCards.MiscSpecial));
     card_deck.push(new Monster_Card("Maimed Vampire", [5, 4, 4, 3], "May enter as Bat form. When placed, single swing at -1 against all Heroes in room. Does not roll against Wounded and Terrified. When 3 {Damage} Damage taken, it is defeated and the Adventurers win the game.", "Special {Monster} Monster", "", kCards.MiscSpecial));
@@ -900,7 +900,7 @@ function generate_miscellaneous_special() {
         card_deck.push(new Monster_Card("Ratman", [4, 4, 3, 3], "If {Sewers} Sewers, may move to any {Sewers} Sewers. On death, drop a {Bones} Bones.", "Small {Monster} Monster", "", kCards.MiscSpecial));
     }
     for (let i = 0; i < 8; i++) {
-        card_deck.push(new Monster_Card("Zombie", [3, 3, 2, 2], "On death, instead remain dormant until a Hero enters the room, then respawn. When it respawns during {Day} Day, it gain -1 to all stats.", "Small {Monster} Monster", "", kCards.MiscSpecial));
+        card_deck.push(new Monster_Card("Zombie", [3, 3, 2, 2], "On death, instead remain dormant until a Hero enters the room, then respawn. When it respawns during {Day} Day, it gains -1 to all stats.", "Small {Monster} Monster", "", kCards.MiscSpecial));
     }
 
 	cards_per_page = 16;
@@ -1197,13 +1197,16 @@ main_canvas.addEventListener("click", function(event) {
 });
 
 function setup_size_pick() {
-    buttons.push(new Cust_Button(150, 175, 100, 50, "8 1/2 by 11", function() {
+    buttons.push(new Cust_Button(100, 175, 200, 50, "8 1/2 by 11 with 1/8 margins", function() {
+        setup_type_pick(2475, 3225);
+    }));
+    buttons.push(new Cust_Button(150, 250, 100, 50, "8 1/2 by 11", function() {
         setup_type_pick(2550, 3300);
     }));
-    buttons.push(new Cust_Button(150, 250, 100, 50, "9 by 12", function() {
+    buttons.push(new Cust_Button(150, 325, 100, 50, "9 by 12", function() {
         setup_type_pick(2700, 3600);
     }));
-    buttons.push(new Cust_Button(150, 325, 100, 50, "A4", function() {
+    buttons.push(new Cust_Button(150, 400, 100, 50, "A4", function() {
         setup_type_pick(2480, 3508);
     }));
     draw_size_pick();
