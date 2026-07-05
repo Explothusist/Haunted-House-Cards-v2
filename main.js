@@ -23,7 +23,7 @@ const kCards = {
     SetRandomization_Vampire: 9, // Complete
     SetRandomization_Adventurers: 10, // Complete
     MiscSpecial: 11, // Like Sword, Charm, Vampire, Armour, Ratman
-    RoomDeck: 12,
+    RoomDeck: 12, // Proof of Concept
 
     DisasterBoonDeck: 13,
     SetRandomization: 14,
@@ -655,7 +655,7 @@ function generate_player_deck_vampire_crumbling_fortress_deck() {
     card_deck.push(new Standard_Card("Chandelier Crashes", "Play after a draw from the Event deck. \n \n Add a {Ruins} Ruins. For the rest of the turn, treat the room as {Unlit} Unlit and ignore room text. Redraw the event draw.", "{Instant} Instant", "{Crumbling_Fortress}", kCards.PlayerDeck_Vampire));
     card_deck.push(new Standard_Card("Crumbling Floorboards", "Play after a draw from the Event deck. \n \n Choose one: add a {Ruins} Ruins or replace the event draw with an Evil {Event} Event. If {Ruins} Ruins, perform both.", "{Instant} Instant", "{Crumbling_Fortress}", kCards.PlayerDeck_Vampire));
     card_deck.push(new Standard_Card("Cursed Breastplate", "+2 on checks to survive. +2 vs attacks from {Armour} Armour. 6+ check each turn to avoid being controlled by the Vampire. On death, spawn animated {Armour} Armour. \n \n This {Item} Item stays with the Hero.", "{Item} Item", "{Crumbling_Fortress}", kCards.PlayerDeck_Vampire));
-    card_deck.push(new Standard_Card("Grotesque Gargoyles", "Play when a room is explored. \n \n In these two rooms, {Ruins} Ruins provide no protection and Monsters may use {Ruins} Ruins like {Sewers} Sewers. This feature counts as a permanent {Ruins} Ruins token. \n \n This {Feature} Feature remains on the board.", "{Feature} Feature", "{Crumbling_Fortress}", kCards.PlayerDeck_Vampire));
+    card_deck.push(new Standard_Card("Grotesque Gargoyles", "Play when a room is explored. \n \n In these two rooms, {Ruins} Ruins provide no protection and Monsters may use {Ruins} Ruins like {Sewers} Sewers. This feature counts as a {Ruins} Ruins token. \n \n This {Feature} Feature remains on the board.", "{Feature} Feature", "{Crumbling_Fortress}", kCards.PlayerDeck_Vampire));
     card_deck.push(new Monster_Card("Ancient Warrior", [7, 5, 4, 3], "Once per turn, when a {Bones} Bones or {Souls} Souls would be dropped in this room, drop a {Ruins} Ruins instead.", "{Monster} Monster", "{Crumbling_Fortress}", kCards.PlayerDeck_Vampire));
     card_deck.push(new Monster_Card("Spectral Knight", [5, 5, 2, 3], "+1 {Power} Power per {Ruins} Ruins. +1 vs attacks per {Ruins} Ruins. +1 to attacks by {Armour} Armour within 3 rooms. On death, add a {Ruins} Ruins.", "{Monster} Monster", "{Crumbling_Fortress}", kCards.PlayerDeck_Vampire));
     card_deck.push(new Standard_Card("Call the Defenders", "Play after a draw from the Event deck. \n \n Animate {Armour} Armour. It gains +1 to its next attack per {Ruins} Ruins. It immediately surprise attacks.", "{Instant} Instant", "{Crumbling_Fortress}", kCards.PlayerDeck_Vampire));
@@ -897,7 +897,7 @@ function generate_miscellaneous_special() {
         card_deck.push(new Monster_Card("Armour", [4, 4, 3, 3], "+2 to checks against Wounded and Terrified. On death, drop an {Armour} Armour.", "Small {Monster} Monster", "", kCards.MiscSpecial));
     }
     for (let i = 0; i < 4; i++) {
-        card_deck.push(new Monster_Card("Ratman", [4, 4, 3, 3], "If {Sewer} Sewer, may move to any {Sewer} Sewer. On death, drop a {Bones} Bones.", "Small {Monster} Monster", "", kCards.MiscSpecial));
+        card_deck.push(new Monster_Card("Ratman", [4, 4, 3, 3], "If {Sewers} Sewers, may move to any {Sewers} Sewers. On death, drop a {Bones} Bones.", "Small {Monster} Monster", "", kCards.MiscSpecial));
     }
     for (let i = 0; i < 8; i++) {
         card_deck.push(new Monster_Card("Zombie", [3, 3, 2, 2], "On death, instead remain dormant until a Hero enters the room, then respawn. When it respawns during {Day} Day, it gain -1 to all stats.", "Small {Monster} Monster", "", kCards.MiscSpecial));
